@@ -1,0 +1,136 @@
+---
+title: Use Cases
+description: 'Explore the different ways to integrate with Zaymo'
+---
+
+# Use Cases
+
+Zaymo offers several integration options to enhance your email marketing and customer experience. Each use case addresses specific business needs and can be implemented independently or in combination.
+
+## Product Upsells {#product-upsells}
+
+The Product Upsells integration allows your customers to add products directly from an email without leaving their inbox.
+
+<Frame>
+  <img src="/images/product-upsell-example.gif" alt="Product upsell example" />
+  *Example of a product upsell in email*
+</Frame>
+
+### How It Works
+
+1. Customer receives an email with embedded product options
+2. Customer selects a product and clicks "Add to Cart"
+3. The product is instantly added to their account
+4. Customer receives confirmation without ever leaving their email
+
+### Required Endpoints
+
+| Endpoint | Purpose | Required |
+| --- | --- | --- |
+| [Get Products](/api-reference/upsells/get-products) | Retrieve product information to display in email | Yes |
+| [Add Product](/api-reference/upsells/add-product) | Process the customer's product selection | Yes |
+| [Customer Info](/api-reference/upsells/customer-info) | Retrieve customer-specific information | Optional |
+
+### Required Data
+
+- **Product Information**:
+  - Product ID
+  - Title
+  - Price (before discount)
+  - Image URLs
+  - Description (optional)
+  - Variants (if applicable)
+- **Customer Information**:
+  - Customer ID
+  - One-time purchase flag
+  - Discount code (optional)
+
+## Portal {#portal}
+
+The Portal integration allows subscribers to manage their subscriptions directly from email, including rescheduling deliveries or requesting immediate shipment.
+
+<Frame>
+  <img src="/images/portal-example.gif" alt="Subscription portal example" />
+  *Example of subscription management in email*
+</Frame>
+
+### How It Works
+
+1. Subscriber receives an email with subscription management options
+2. Subscriber can view current subscription details
+3. Subscriber can reschedule their next delivery or request immediate shipment
+4. Changes are confirmed without leaving the email
+
+### Required Endpoints
+
+| Endpoint | Purpose | Required |
+| --- | --- | --- |
+| [Subscription Info](/api-reference/portal/subscription-info) | Retrieve current subscription details | Yes |
+| [Reschedule](/api-reference/portal/reschedule) | Process subscription rescheduling requests | Yes |
+| [Send Now](/api-reference/portal/send-now) | Process immediate shipment requests | Yes |
+
+### Required Data
+
+- **Subscription Information**:
+  - Subscription ID
+  - Current delivery schedule
+  - Product details
+- **Rescheduling Information**:
+  - Customer ID
+  - New delivery date
+- **Send Now Information**:
+  - Customer ID
+  - Subscription ID
+
+## Reactivate {#reactivate}
+
+The Reactivate integration makes it easy for customers to reactivate cancelled subscriptions directly from email.
+
+<Frame>
+  <img src="/images/reactivate-example.gif" alt="Reactivation example" />
+  *Example of subscription reactivation in email*
+</Frame>
+
+### How It Works
+
+1. Former subscriber receives an email with reactivation offer
+2. Customer views their cancelled subscription details
+3. Customer clicks to reactivate their subscription, potentially with a special offer
+4. Subscription is reactivated without leaving the email
+
+### Required Endpoints
+
+| Endpoint | Purpose | Required |
+| --- | --- | --- |
+| [List Cancelled Subscriptions](/api-reference/reactivate/list-cancelled) | Retrieve cancelled subscription details | Yes |
+| [Reactivate](/api-reference/reactivate/reactivate) | Process subscription reactivation | Yes |
+
+### Required Data
+
+- **Cancelled Subscription Information**:
+  - Customer ID
+  - Subscription details
+- **Reactivation Information**:
+  - Customer ID
+  - Discount code (optional)
+
+## Getting Started
+
+Ready to implement one of these use cases? We recommend starting with either the Product Upsells or Portal integration, as they typically provide the quickest path to value.
+
+<CardGroup cols={2}>
+  <Card
+    title="API Reference"
+    icon="code"
+    href="/api-reference/introduction"
+  >
+    Explore our API documentation
+  </Card>
+  <Card
+    title="Authentication"
+    icon="key"
+    href="/api-reference/introduction#authentication"
+  >
+    Learn how to authenticate your API requests
+  </Card>
+</CardGroup>

@@ -1,0 +1,148 @@
+---
+title: 'Customer Info'
+api: 'GET /upsells/customer-info'
+description: 'Retrieve customer-specific information for personalized upsells'
+---
+
+# Customer Info
+
+This optional endpoint retrieves customer-specific information to enable personalized product recommendations and upsell experiences in email. When implemented, it allows Zaymo to display customer-specific content like order history, preferences, and personalized recommendations.
+
+## Request
+
+<ParamField path="customer_id" type="string" required>
+  The unique identifier for the customer.
+</ParamField>
+
+### Example Request
+
+```bash
+curl -X GET "https://api.zaymo.com/v1/upsells/customer-info?customer_id=cus_12345" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful.
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="Properties">
+    <ResponseField name="customer" type="object">
+      <Expandable title="Customer Object">
+        <ResponseField name="id" type="string">
+          Unique identifier for the customer.
+        </ResponseField>
+        <ResponseField name="first_name" type="string">
+          Customer's first name.
+        </ResponseField>
+        <ResponseField name="last_name" type="string" optional>
+          Customer's last name.
+        </ResponseField>
+        <ResponseField name="email" type="string">
+          Customer's email address.
+        </ResponseField>
+        <ResponseField name="purchase_history" type="array" optional>
+          <Expandable title="Purchase Object">
+            <ResponseField name="product_id" type="string">
+              ID of a previously purchased product.
+            </ResponseField>
+            <ResponseField name="product_title" type="string">
+              Title of the previously purchased product.
+            </ResponseField>
+            <ResponseField name="purchase_date" type="string">
+              ISO 8601 formatted date of purchase.
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+        <ResponseField name="preferences" type="object" optional>
+          Any customer preferences that might be relevant for product recommendations.
+          
+          Example: `{"preferred_categories": ["skincare", "makeup"], "skin_type": "dry"}`
+        </ResponseField>
+        <ResponseField name="subscription_status" type="string" optional>
+          If applicable, the status of the customer's subscription (e.g., "active", "paused").
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="recommended_products" type="array" optional>
+      <Expandable title="Product ID Array">
+        Array of product IDs that are recommended for this customer based on their history or preferences.
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "customer": {
+      "id": "cus_12345",
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "email": "jane.smith@example.com",
+      "purchase_history": [
+        {
+          "product_id": "prod_11111",
+          "product_title": "Facial Cleanser",
+          "purchase_date": "2025-03-15T14:30:00Z"
+        },
+        {
+          "product_id": "prod_22222",
+          "product_title": "Night Cream",
+          "purchase_date": "2025-04-22T09:15:00Z"
+        }
+      ],
+      "preferences": {
+        "preferred_categories": ["skincare", "haircare"],
+        "skin_type": "combination",
+        "concerns": ["aging", "dryness"]
+      },
+      "subscription_status": "active"
+    },
+    "recommended_products": [
+      "prod_33333",
+      "prod_44444",
+      "prod_55555"
+    ]
+  }
+}
+```
+
+## Error Responses
+
+<AccordionGroup>
+  <Accordion title="Invalid Customer ID">
+    ```json
+    {
+      "success": false,
+      "error": {
+        "code": "invalid_request",
+        "message": "Invalid customer_id provided"
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="Customer Not Found">
+    ```json
+    {
+      "success": false,
+      "error": {
+        "code": "not_found",
+        "message": "Customer not found"
+      }
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Notes
+
+- This endpoint is optional but highly recommended for creating personalized upsell experiences
+- The more customer data you can provide, the more targeted the product recommendations can be
+- All customer data is handled securely and in compliance with privacy regulations
+- Consider including recent browsing history or abandoned cart items in the response for highly relevant recommendations

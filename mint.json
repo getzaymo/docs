@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Custom Integrations",
+  "name": "Zaymo Integration",
   "logo": {
     "dark": "/logo/zaymo-dark.svg",
     "light": "/logo/zaymo-light.svg"
@@ -41,22 +41,39 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["introduction", "quickstart", "development"]
-    },
-    {
-      "group": "Essentials",
-      "pages": ["essentials/markdown", "essentials/code", "essentials/images", "essentials/settings", "essentials/navigation"]
+      "pages": ["introduction", "usecases"]
     },
     {
       "group": "API Documentation",
       "pages": ["api-reference/introduction"]
     },
     {
-      "group": "Endpoint Examples",
+      "group": "Product Upsells",
       "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
+        "api-reference/upsells/get-products",
+        "api-reference/upsells/add-product",
+        "api-reference/upsells/customer-info"
+      ]
+    },
+    {
+      "group": "Portal",
+      "pages": [
+        "api-reference/portal/subscription-info",
+        "api-reference/portal/reschedule",
+        "api-reference/portal/send-now"
+      ]
+    },
+    {
+      "group": "Reactivate",
+      "pages": [
+        "api-reference/reactivate/list-cancelled",
+        "api-reference/reactivate/reactivate"
+      ]
+    },
+    {
+      "group": "Testing",
+      "pages": [
+        "api-reference/testing"
       ]
     }
   ],

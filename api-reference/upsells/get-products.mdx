@@ -1,0 +1,153 @@
+---
+title: 'Get Products'
+api: 'GET /upsells/products'
+description: 'Retrieve product information to display in email'
+---
+
+# Get Products
+
+This endpoint retrieves product information that will be displayed in the email upsell widget. You can either return a dynamic list of products based on the customer's preferences or a static list of products for all customers.
+
+## Request
+
+<ParamField path="customer_id" type="string" required>
+  The unique identifier for the customer.
+</ParamField>
+
+### Example Request
+
+```bash
+curl -X GET "https://api.zaymo.com/v1/upsells/products?customer_id=cus_12345" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful.
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="Properties">
+    <ResponseField name="products" type="array">
+      <Expandable title="Product Object">
+        <ResponseField name="id" type="string">
+          Unique identifier for the product.
+        </ResponseField>
+        <ResponseField name="title" type="string">
+          Name or title of the product.
+        </ResponseField>
+        <ResponseField name="price" type="number">
+          Price of the product before any discounts (in cents).
+        </ResponseField>
+        <ResponseField name="images" type="array">
+          Array of image URLs for the product.
+        </ResponseField>
+        <ResponseField name="description" type="string" optional>
+          Optional description of the product.
+        </ResponseField>
+        <ResponseField name="variants" type="array" optional>
+          <Expandable title="Variant Object">
+            <ResponseField name="option_name" type="string">
+              Name of the variant option (e.g., "Size", "Color").
+            </ResponseField>
+            <ResponseField name="option_values" type="array">
+              Array of possible values for this option.
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="discounts" type="array" optional>
+      <Expandable title="Discount Object">
+        <ResponseField name="code" type="string">
+          Discount code.
+        </ResponseField>
+        <ResponseField name="percentage_off" type="number">
+          Percentage discount (e.g., 10 for 10% off).
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "products": [
+      {
+        "id": "prod_12345",
+        "title": "Premium Moisturizer",
+        "price": 2995,
+        "images": [
+          "https://example.com/images/moisturizer-1.jpg",
+          "https://example.com/images/moisturizer-2.jpg"
+        ],
+        "description": "Our best-selling moisturizer for all skin types",
+        "variants": [
+          {
+            "option_name": "Size",
+            "option_values": ["2oz", "4oz", "8oz"]
+          }
+        ]
+      },
+      {
+        "id": "prod_67890",
+        "title": "Facial Cleanser",
+        "price": 1995,
+        "images": [
+          "https://example.com/images/cleanser-1.jpg"
+        ],
+        "description": "Gentle cleanser for daily use"
+      }
+    ],
+    "discounts": [
+      {
+        "code": "WELCOME10",
+        "percentage_off": 10
+      },
+      {
+        "code": "SUMMER20",
+        "percentage_off": 20
+      }
+    ]
+  }
+}
+```
+
+## Error Responses
+
+<AccordionGroup>
+  <Accordion title="Invalid Customer ID">
+    ```json
+    {
+      "success": false,
+      "error": {
+        "code": "invalid_request",
+        "message": "Invalid customer_id provided"
+      }
+    }
+    ```
+  </Accordion>
+  <Accordion title="Authentication Error">
+    ```json
+    {
+      "success": false,
+      "error": {
+        "code": "unauthorized",
+        "message": "Invalid API key"
+      }
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Notes
+
+- We recommend limiting the product list to 3-5 products for optimal email display
+- Images should be optimized for email (recommended size: 600x600px)
+- Product descriptions should be concise (under 100 characters)
+- If using variants, keep options simple to avoid complexity in the email interface

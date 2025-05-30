@@ -1,33 +1,108 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: 'API Reference'
+description: 'Overview of Zaymo API integration'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+# API Reference
 
-## Welcome
+Welcome to the Zaymo API reference. This documentation will help you integrate Zaymo's in-email purchase functionality into your systems.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+## Base URL
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+All API requests should be made to the following base URL:
 
-## Authentication
+```
+https://api.zaymo.com/v1
+```
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+## Authentication {#authentication}
+
+All API endpoints are authenticated using API keys. You will receive a unique API key when you partner with Zaymo.
+
+### API Key Authentication
+
+Include your API key in the `Authorization` header of all requests:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+<Warning>
+  Keep your API key secure and never expose it in client-side code. All API requests should be made from your server.
+</Warning>
+
+### Example Request with Authentication
+
+```bash
+curl -X POST https://api.zaymo.com/v1/upsells/add-product \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "customer_id": "cus_12345",
+    "product_id": "prod_67890",
+    "onetime": true
+  }'
+```
+
+## Response Format
+
+All API responses are returned in JSON format. A typical successful response will have the following structure:
 
 ```json
-"security": [
-  {
-    "bearerAuth": []
+{
+  "success": true,
+  "data": {
+    // Response data specific to the endpoint
   }
-]
+}
 ```
+
+## Error Handling
+
+When an error occurs, the API will return an appropriate HTTP status code along with a JSON response containing error details:
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "invalid_request",
+    "message": "A descriptive error message",
+    "details": {} // Additional error details when available
+  }
+}
+```
+
+### Common Error Codes
+
+| HTTP Status | Error Code | Description |
+| --- | --- | --- |
+| 400 | `invalid_request` | The request was malformed or missing required parameters |
+| 401 | `unauthorized` | Invalid or missing API key |
+| 403 | `forbidden` | The API key doesn't have permission to perform the request |
+| 404 | `not_found` | The requested resource was not found |
+| 429 | `rate_limit_exceeded` | Too many requests in a given amount of time |
+| 500 | `server_error` | An unexpected error occurred on the Zaymo server |
+
+## Rate Limits
+
+To ensure system stability, the Zaymo API implements rate limiting. The current limits are:
+
+- 100 requests per minute per API key
+- 5,000 requests per day per API key
+
+If you exceed these limits, you'll receive a `429 Too Many Requests` response with a `rate_limit_exceeded` error code.
+
+## Versioning
+
+The Zaymo API uses versioning in the URL path (e.g., `/v1/`) to ensure backward compatibility. When we make breaking changes, we'll release a new API version while maintaining support for previous versions.
+
+## Testing
+
+For testing purposes, we provide a test environment and test customer profiles. See our [testing guide](/api-reference/testing) for more information.
+
+<Card
+  title="Need Help?"
+  icon="question-circle"
+>
+  If you have any questions or need assistance with your integration, please contact our support team at [support@zaymo.com](mailto:support@zaymo.com).
+</Card>

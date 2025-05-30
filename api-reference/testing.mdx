@@ -1,0 +1,140 @@
+---
+title: 'Testing'
+description: 'Test your Zaymo integration before going live'
+---
+
+# Testing Your Integration
+
+Before launching your Zaymo integration in production, it's important to thoroughly test all functionality. This guide provides information on our testing environment and test profiles.
+
+## Test Environment
+
+Zaymo provides a dedicated test environment that mirrors our production environment but doesn't process real orders or affect real customer data. Use this environment for all development and testing.
+
+### Test API Base URL
+
+```
+https://api-test.zaymo.com/v1
+```
+
+### Test API Key
+
+When you partner with Zaymo, you'll receive both a production API key and a test API key. The test API key should be used for all development and testing activities.
+
+```bash
+Authorization: Bearer YOUR_TEST_API_KEY
+```
+
+<Warning>
+  Never use your production API key in development or testing environments.
+</Warning>
+
+## Test Customer Profiles
+
+To help you test your integration, we provide several test customer profiles with different characteristics:
+
+### Standard Test Customer
+
+```json
+{
+  "customer_id": "cus_test_12345",
+  "email": "test@example.com",
+  "first_name": "Test",
+  "last_name": "Customer"
+}
+```
+
+### Customer with Active Subscriptions
+
+```json
+{
+  "customer_id": "cus_test_67890",
+  "email": "subscription@example.com",
+  "first_name": "Subscription",
+  "last_name": "Tester",
+  "has_active_subscriptions": true
+}
+```
+
+### Customer with Cancelled Subscriptions
+
+```json
+{
+  "customer_id": "cus_test_54321",
+  "email": "cancelled@example.com",
+  "first_name": "Cancelled",
+  "last_name": "Subscriber",
+  "has_cancelled_subscriptions": true
+}
+```
+
+## Test Products
+
+The test environment includes a set of test products you can use for your integration:
+
+| Product ID | Title | Price (cents) |
+| --- | --- | --- |
+| prod_test_12345 | Test Product A | 1995 |
+| prod_test_67890 | Test Product B | 2995 |
+| prod_test_54321 | Test Product C | 4995 |
+
+## Test Discount Codes
+
+You can use the following discount codes in the test environment:
+
+| Discount Code | Percentage Off | Description |
+| --- | --- | --- |
+| TEST10 | 10% | Standard 10% discount |
+| TEST20 | 20% | Standard 20% discount |
+| COMEBACK15 | 15% | Reactivation discount |
+
+## Testing Each Use Case
+
+### Testing Product Upsells
+
+1. Use the Get Products endpoint with a test customer ID
+2. Verify that product information is returned correctly
+3. Use the Add Product endpoint to add a test product
+4. Verify that the product was added successfully
+
+### Testing Portal Functionality
+
+1. Use the Subscription Info endpoint with a test customer ID that has active subscriptions
+2. Verify that subscription information is returned correctly
+3. Use the Reschedule endpoint to change a delivery date
+4. Use the Send Now endpoint to request immediate shipment
+5. Verify that both operations complete successfully
+
+### Testing Reactivation
+
+1. Use the List Cancelled Subscriptions endpoint with a test customer ID that has cancelled subscriptions
+2. Verify that cancelled subscription information is returned correctly
+3. Use the Reactivate endpoint to reactivate a subscription
+4. Verify that the subscription was reactivated successfully
+
+## Error Testing
+
+It's important to test error scenarios as well as successful operations:
+
+- Test with invalid customer IDs
+- Test with invalid product IDs
+- Test with invalid subscription IDs
+- Test with invalid discount codes
+- Test with missing required parameters
+- Test with invalid date formats
+
+## Going Live
+
+Once you've thoroughly tested your integration in the test environment, contact your Zaymo representative to coordinate the transition to production. They will:
+
+1. Review your integration
+2. Provide guidance on any necessary adjustments
+3. Help you set up your production API key
+4. Coordinate the launch timeline
+
+<Card
+  title="Need Help?"
+  icon="question-circle"
+>
+  If you encounter any issues during testing, please contact our support team at [support@zaymo.com](mailto:support@zaymo.com).
+</Card>
