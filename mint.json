@@ -33,11 +33,6 @@
   ],
   "anchors": [
     {
-      "name": "Site",
-      "icon": "home",
-      "url": "https://zaymo.com"
-    },
-    {
       "name": "Blog",
       "icon": "newspaper",
       "url": "https://zaymo.com/blog"
