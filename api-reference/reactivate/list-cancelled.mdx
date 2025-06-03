@@ -2,11 +2,31 @@
 title: 'List Cancelled Subscriptions'
 api: 'GET /reactivate/cancelled-subscriptions'
 description: 'Retrieve cancelled subscription details for a customer'
+playground: 'none'
 ---
 
 # List Cancelled Subscriptions
 
 This endpoint retrieves information about a customer's cancelled subscriptions, which is displayed in the email reactivation widget. This allows customers to view their previous subscription details before deciding to reactivate.
+
+## Required Data
+
+### Cancelled Subscription Information
+- **Customer ID**: Unique identifier for the customer
+- **Subscription details**: Information about previously cancelled subscriptions
+
+## Optional Parameters
+
+### Display Options
+- **Show cancellation reason**: Display why the subscription was cancelled
+- **Show original subscription terms**: Display the original subscription details
+- **Show available discounts**: Display special offers for reactivation
+- **Show potential savings**: Highlight savings from reactivation offers
+
+### Filtering Options
+- **Time since cancellation**: Filter by how recently subscriptions were cancelled
+- **Subscription type**: Filter by subscription type or product category
+- **Cancellation reason**: Filter by why subscriptions were cancelled
 
 ## Request
 

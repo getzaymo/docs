@@ -2,11 +2,32 @@
 title: 'Reschedule'
 api: 'POST /portal/reschedule'
 description: 'Reschedule a subscription delivery date'
+playground: 'none'
 ---
 
 # Reschedule
 
 This endpoint processes a customer's request to reschedule their subscription delivery date. When a subscriber selects a new delivery date in the email portal widget, this endpoint is called to update their subscription.
+
+## Required Data
+
+### Rescheduling Information
+- **Customer ID**: Unique identifier for the customer
+- **Subscription ID**: Unique identifier for the subscription to reschedule
+- **New delivery date**: The requested new delivery date
+
+## Optional Parameters
+
+### Date Selection Options
+- **Provide available dates**: Present customer with valid delivery dates
+- **Allow date range selection**: Enable selection within a specific range
+- **Blackout dates**: Dates when delivery is not available
+- **Preferred day selection**: Allow customers to set a preferred day of week
+
+### Notification Options
+- **Send confirmation email**: Email confirmation of the schedule change
+- **Add to calendar**: Include calendar attachment with new date
+- **Notify about billing changes**: Alert if billing date will also change
 
 ## Request
 

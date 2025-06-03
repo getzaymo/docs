@@ -8,6 +8,34 @@ description: "Add a product to a customer's order directly from email"
 
 This endpoint processes a customer's product selection from the email upsell widget. When a customer clicks to add a product in the email, this endpoint is called to add the product to their order.
 
+## Required Data
+
+### Customer Information
+- **Customer ID**: Unique identifier for the customer
+- **One-time purchase flag**: Whether this is a one-time purchase (`true`) or should be added to a subscription (`false`)
+- **Discount code** (optional): Any applicable discount code to apply to the purchase
+
+### Product Information
+- **Product ID**: Unique identifier for the selected product
+- **Variant selections** (if applicable): Customer's choices for product variants (e.g., size, color)
+
+## Optional Parameters
+
+### Purchase Type Options
+- **One-time purchase**: Process as a single purchase
+- **Add to existing subscription**: Add the product to the customer's current subscription
+- **Create new subscription**: Start a new subscription with this product
+
+### Subscription Options (when applicable)
+- **Frequency**: Weekly, monthly, etc.
+- **Delivery day preference**: Preferred day of delivery
+- **Number of items per delivery**: Quantity per delivery cycle
+
+### Discount Application
+- **Apply to first order only**: One-time discount
+- **Apply to first X orders**: Limited-time discount
+- **Apply to all future orders**: Ongoing discount
+
 ## Request
 
 <ParamField body="customer_id" type="string" required>

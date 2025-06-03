@@ -2,11 +2,36 @@
 title: 'Subscription Info'
 api: 'GET /portal/subscription-info'
 description: 'Retrieve current subscription details for a customer'
+playground: 'none'
 ---
 
 # Subscription Info
 
 This endpoint retrieves current subscription information for a customer, which is displayed in the email portal widget. This allows subscribers to view their subscription details directly in the email.
+
+## Required Data
+
+### Subscription Information
+- **Subscription ID**: Unique identifier for the subscription
+- **Current delivery schedule**: Next delivery date and frequency
+- **Product details**: Products included in the subscription
+
+### Customer Information
+- **Customer ID**: Unique identifier for the customer
+
+## Optional Parameters
+
+### Display Options
+- **Show order history**: Display previous deliveries
+- **Show payment method**: Display masked payment information
+- **Show shipping address**: Display delivery address
+- **Display upcoming promotions**: Show future discounts or offers
+
+### Action Controls
+- **Enable/disable reschedule option**: Allow customers to change delivery dates
+- **Enable/disable skip option**: Allow customers to skip a delivery
+- **Enable/disable send now option**: Allow customers to request immediate shipment
+- **Enable/disable edit subscription option**: Allow customers to modify products
 
 ## Request
 

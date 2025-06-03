@@ -2,11 +2,32 @@
 title: 'Reactivate'
 api: 'POST /reactivate/subscription'
 description: 'Reactivate a previously cancelled subscription'
+playground: 'none'
 ---
 
 # Reactivate
 
 This endpoint processes a customer's request to reactivate a previously cancelled subscription. When a customer clicks to reactivate their subscription in the email reactivation widget, this endpoint is called to restore their subscription.
+
+## Required Data
+
+### Reactivation Information
+- **Customer ID**: Unique identifier for the customer
+- **Subscription ID**: Unique identifier for the cancelled subscription to reactivate
+- **Discount code** (optional): Discount code to apply to the reactivated subscription
+
+## Optional Parameters
+
+### Reactivation Options
+- **Apply special offer**: Apply a win-back discount or promotion
+- **Modify subscription**: Allow changes to the original subscription
+- **Immediate shipment**: Option to ship immediately upon reactivation
+- **Change frequency**: Option to select a different delivery frequency
+
+### Notification Options
+- **Send welcome back email**: Confirmation of successful reactivation
+- **Provide next delivery date**: Information about the next shipment
+- **Include subscription management links**: Links to manage the reactivated subscription
 
 ## Request
 

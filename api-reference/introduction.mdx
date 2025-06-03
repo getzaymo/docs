@@ -1,52 +1,65 @@
 ---
-title: 'API Reference'
-description: 'Overview of Zaymo API integration'
+title: 'Introduction'
+description: 'Overview of how to build an API for Zaymo integration'
+playground: 'none'
 ---
 
-# API Reference
+## API Implementation Guide
 
-Welcome to the Zaymo API reference. This documentation will help you integrate Zaymo's in-email purchase functionality into your systems.
+This documentation outlines the API endpoints that you, as a Zaymo partner, need to implement on your server. Zaymo will make requests to these endpoints to enable in-email purchase functionality for your customers.
 
 ## Base URL
 
-All API requests should be made to the following base URL:
+You will need to provide Zaymo with the base URL of your API implementation. This is the domain where you'll host these endpoints, for example:
 
 ```
-https://api.zaymo.com/v1
+https://api.yourdomain.com
 ```
 
-## Authentication {#authentication}
+When Zaymo makes requests to your API, we will append specific paths to your base URL. For example, if your base URL is `https://api.yourdomain.com`, we would make requests to endpoints like:
 
-All API endpoints are authenticated using API keys. You will receive a unique API key when you partner with Zaymo.
+```
+https://api.yourdomain.com/zaymo/upsell
+```
 
-### API Key Authentication
+All API endpoints in this documentation will follow this pattern, with `/zaymo` as the prefix for all Zaymo-related routes.
 
-Include your API key in the `Authorization` header of all requests:
+## <a id="authentication"></a>Authentication
+
+All API endpoints should be secured. Zaymo will authenticate requests to your API using API keys. You should provide Zaymo with an API key that our system will use when making requests to your endpoints.
+
+### API Key Validation
+
+Your API should validate the API key included in the `Authorization` header of all incoming requests from Zaymo:
 
 ```bash
-Authorization: Bearer YOUR_API_KEY
+Authorization: Bearer YOUR_PROVIDED_API_KEY
 ```
 
 <Warning>
-  Keep your API key secure and never expose it in client-side code. All API requests should be made from your server.
+  Keep your API key secure and implement proper validation. Reject any requests that don't include a valid API key.
 </Warning>
 
-### Example Request with Authentication
+### Example Request Authentication Validation
+
+When Zaymo makes a request to your API, it will look something like this:
 
 ```bash
-curl -X POST https://api.zaymo.com/v1/upsells/add-product \
-  -H "Authorization: Bearer YOUR_API_KEY" \
+curl -X POST https://api.yourdomain.com/zaymo/upsell/add-product \
+  -H "Authorization: Bearer YOUR_PROVIDED_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "customer_id": "cus_12345",
+    "email": "customer@example.com",
     "product_id": "prod_67890",
     "onetime": true
   }'
 ```
 
+Your API should validate the API key before processing the request.
+
 ## Response Format
 
-All API responses are returned in JSON format. A typical successful response will have the following structure:
+Your API responses should be returned in JSON format. A typical successful response should have the following structure:
 
 ```json
 {
@@ -59,7 +72,7 @@ All API responses are returned in JSON format. A typical successful response wil
 
 ## Error Handling
 
-When an error occurs, the API will return an appropriate HTTP status code along with a JSON response containing error details:
+When an error occurs, your API should return an appropriate HTTP status code along with a JSON response containing error details:
 
 ```json
 {
@@ -72,7 +85,7 @@ When an error occurs, the API will return an appropriate HTTP status code along 
 }
 ```
 
-### Common Error Codes
+### Recommended Error Codes
 
 | HTTP Status | Error Code | Description |
 | --- | --- | --- |
@@ -81,28 +94,19 @@ When an error occurs, the API will return an appropriate HTTP status code along 
 | 403 | `forbidden` | The API key doesn't have permission to perform the request |
 | 404 | `not_found` | The requested resource was not found |
 | 429 | `rate_limit_exceeded` | Too many requests in a given amount of time |
-| 500 | `server_error` | An unexpected error occurred on the Zaymo server |
+| 500 | `server_error` | An unexpected error occurred on your server |
 
 ## Rate Limits
 
-To ensure system stability, the Zaymo API implements rate limiting. The current limits are:
-
-- 100 requests per minute per API key
-- 5,000 requests per day per API key
-
-If you exceed these limits, you'll receive a `429 Too Many Requests` response with a `rate_limit_exceeded` error code.
-
-## Versioning
-
-The Zaymo API uses versioning in the URL path (e.g., `/v1/`) to ensure backward compatibility. When we make breaking changes, we'll release a new API version while maintaining support for previous versions.
+If you implement rate limiting on your API, please inform Zaymo of your limits so we can optimize our requests accordingly.
 
 ## Testing
 
-For testing purposes, we provide a test environment and test customer profiles. See our [testing guide](/api-reference/testing) for more information.
+For testing purposes, we recommend setting up a test user in your system. You can then  the test user's email address in the `email` parameter of our API requestuses.
 
 <Card
   title="Need Help?"
-  icon="question-circle"
+  icon="circle-question"
 >
-  If you have any questions or need assistance with your integration, please contact our support team at [support@zaymo.com](mailto:support@zaymo.com).
+  If you have any questions or need assistance with your API implementation, please contact our support team at [daniel@zaymo.com](mailto:daniel@zaymo.com).
 </Card>

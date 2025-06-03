@@ -8,6 +8,44 @@ description: 'Retrieve product information to display in email'
 
 This endpoint retrieves product information that will be displayed in the email upsell widget. You can either return a dynamic list of products based on the customer's preferences or a static list of products for all customers.
 
+## Required Data
+
+### Product Information
+- **Product ID**: Unique identifier for each product
+- **Title**: Name or title of the product
+- **Price**: Price of the product before any discounts (in cents)
+- **Images**: Array of image URLs for the product
+- **Description** (optional): Brief description of the product
+- **Variants** (if applicable): Product options such as size, color, etc.
+
+### Customer Information
+- **Customer ID**: Unique identifier for the customer
+- **One-time purchase flag**: Whether this is a one-time purchase or subscription addition
+- **Discount code** (optional): Any applicable discount code
+
+## Optional Parameters
+
+### Purchase Type Options
+- **One-time purchase**: Allow customers to make a single purchase
+- **Add to existing subscription**: Add the product to a customer's current subscription
+- **Create new subscription**: Start a new subscription with this product
+
+### Subscription Options (when applicable)
+- **Frequency**: Weekly, monthly, etc.
+- **Delivery day preference**: Preferred day of delivery
+- **Number of items per delivery**: Quantity per delivery cycle
+
+### Discount Application
+- **Apply to first order only**: One-time discount
+- **Apply to first X orders**: Limited-time discount
+- **Apply to all future orders**: Ongoing discount
+
+### Upsell Display Options
+- **Show product ratings/reviews**: Display social proof
+- **Display limited-time offer countdown**: Create urgency
+- **Show inventory status**: Indicate limited availability
+- **Highlight savings amount**: Show discount value
+
 ## Request
 
 <ParamField path="customer_id" type="string" required>

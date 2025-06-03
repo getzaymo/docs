@@ -3,13 +3,11 @@ title: Use Cases
 description: 'Explore the different ways to integrate with Zaymo'
 ---
 
-# Use Cases
+Zaymo offers several in-email widgets. Each widget can be implemented independently.
 
-Zaymo offers several integration options to enhance your email marketing and customer experience. Each use case addresses specific business needs and can be implemented independently or in combination.
+## <a id="product-upsells"></a>Product Upsells
 
-## Product Upsells {#product-upsells}
-
-The Product Upsells integration allows your customers to add products directly from an email without leaving their inbox.
+The Product Upsells widget allows customers to purchase products or add them to subscriptions directly from an email with just one click, without ever leaving their inbox.
 
 <Frame>
   <img src="/images/product-upsell-example.gif" alt="Product upsell example" />
@@ -18,9 +16,9 @@ The Product Upsells integration allows your customers to add products directly f
 
 ### How It Works
 
-1. Customer receives an email with embedded product options
-2. Customer selects a product and clicks "Add to Cart"
-3. The product is instantly added to their account
+1. Customer receives an email with an embedded product block
+2. Customer selects a product and clicks to purchase
+3. The product is instantly purchased or added to their subscription
 4. Customer receives confirmation without ever leaving their email
 
 ### Required Endpoints
@@ -28,26 +26,11 @@ The Product Upsells integration allows your customers to add products directly f
 | Endpoint | Purpose | Required |
 | --- | --- | --- |
 | [Get Products](/api-reference/upsells/get-products) | Retrieve product information to display in email | Yes |
-| [Add Product](/api-reference/upsells/add-product) | Process the customer's product selection | Yes |
-| [Customer Info](/api-reference/upsells/customer-info) | Retrieve customer-specific information | Optional |
+| [Add Product](/api-reference/upsells/add-product) | Process the customer's purchase or subscription addition | Yes |
 
-### Required Data
+## <a id="subscription portal"></a>Subscription Portal
 
-- **Product Information**:
-  - Product ID
-  - Title
-  - Price (before discount)
-  - Image URLs
-  - Description (optional)
-  - Variants (if applicable)
-- **Customer Information**:
-  - Customer ID
-  - One-time purchase flag
-  - Discount code (optional)
-
-## Portal {#portal}
-
-The Portal integration allows subscribers to manage their subscriptions directly from email, including rescheduling deliveries or requesting immediate shipment.
+The Subscription Portal widget allows subscribers to manage their subscriptions directly from email, including rescheduling deliveries or requesting immediate shipment.
 
 <Frame>
   <img src="/images/portal-example.gif" alt="Subscription portal example" />
@@ -63,28 +46,19 @@ The Portal integration allows subscribers to manage their subscriptions directly
 
 ### Required Endpoints
 
+Under Construction 🚧
+
+{/* 
 | Endpoint | Purpose | Required |
 | --- | --- | --- |
 | [Subscription Info](/api-reference/portal/subscription-info) | Retrieve current subscription details | Yes |
 | [Reschedule](/api-reference/portal/reschedule) | Process subscription rescheduling requests | Yes |
 | [Send Now](/api-reference/portal/send-now) | Process immediate shipment requests | Yes |
+*/}
 
-### Required Data
+## <a id="reactivate"></a>Reactivate
 
-- **Subscription Information**:
-  - Subscription ID
-  - Current delivery schedule
-  - Product details
-- **Rescheduling Information**:
-  - Customer ID
-  - New delivery date
-- **Send Now Information**:
-  - Customer ID
-  - Subscription ID
-
-## Reactivate {#reactivate}
-
-The Reactivate integration makes it easy for customers to reactivate cancelled subscriptions directly from email.
+The Reactivate widget makes it easy for customers to reactivate cancelled subscriptions directly from email.
 
 <Frame>
   <img src="/images/reactivate-example.gif" alt="Reactivation example" />
@@ -100,23 +74,18 @@ The Reactivate integration makes it easy for customers to reactivate cancelled s
 
 ### Required Endpoints
 
+Under Construction 🚧
+
+{/* 
 | Endpoint | Purpose | Required |
 | --- | --- | --- |
 | [List Cancelled Subscriptions](/api-reference/reactivate/list-cancelled) | Retrieve cancelled subscription details | Yes |
 | [Reactivate](/api-reference/reactivate/reactivate) | Process subscription reactivation | Yes |
-
-### Required Data
-
-- **Cancelled Subscription Information**:
-  - Customer ID
-  - Subscription details
-- **Reactivation Information**:
-  - Customer ID
-  - Discount code (optional)
+*/}
 
 ## Getting Started
 
-Ready to implement one of these use cases? We recommend starting with either the Product Upsells or Portal integration, as they typically provide the quickest path to value.
+Ready to implement one of these widgets? We recommend starting with either the Product Upsells or Subscription Portal widget, as they typically provide the quickest path to value.
 
 <CardGroup cols={2}>
   <Card

@@ -2,11 +2,31 @@
 title: 'Send Now'
 api: 'POST /portal/send-now'
 description: 'Request immediate shipment of a subscription order'
+playground: 'none'
 ---
 
 # Send Now
 
 This endpoint processes a customer's request to ship their next subscription order immediately. When a subscriber clicks the "Send Now" button in the email portal widget, this endpoint is called to trigger an immediate shipment.
+
+## Required Data
+
+### Send Now Information
+- **Customer ID**: Unique identifier for the customer
+- **Subscription ID**: Unique identifier for the subscription to ship immediately
+
+## Optional Parameters
+
+### Shipment Options
+- **Express shipping**: Offer expedited shipping option
+- **Include additional products**: Allow adding one-time products to the shipment
+- **Modify subscription contents**: Allow changing products for this shipment only
+- **Apply one-time discount**: Special discount for immediate shipment
+
+### Notification Options
+- **Send confirmation email**: Email confirmation of the immediate shipment
+- **Provide tracking information**: Include tracking details when available
+- **Notify about schedule changes**: Alert about changes to future delivery dates
 
 ## Request
 

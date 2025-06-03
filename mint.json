@@ -33,6 +33,11 @@
   ],
   "anchors": [
     {
+      "name": "Site",
+      "icon": "globe",
+      "url": "https://zaymo.com"
+    },
+    {
       "name": "Blog",
       "icon": "newspaper",
       "url": "https://zaymo.com/blog"
@@ -51,29 +56,7 @@
       "group": "Product Upsells",
       "pages": [
         "api-reference/upsells/get-products",
-        "api-reference/upsells/add-product",
-        "api-reference/upsells/customer-info"
-      ]
-    },
-    {
-      "group": "Portal",
-      "pages": [
-        "api-reference/portal/subscription-info",
-        "api-reference/portal/reschedule",
-        "api-reference/portal/send-now"
-      ]
-    },
-    {
-      "group": "Reactivate",
-      "pages": [
-        "api-reference/reactivate/list-cancelled",
-        "api-reference/reactivate/reactivate"
-      ]
-    },
-    {
-      "group": "Testing",
-      "pages": [
-        "api-reference/testing"
+        "api-reference/upsells/add-product"
       ]
     }
   ],

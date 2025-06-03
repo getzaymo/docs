@@ -1,43 +1,58 @@
 ---
 title: 'Testing'
 description: 'Test your Zaymo integration before going live'
+playground: 'none'
 ---
 
 # Testing Your Integration
 
-Before launching your Zaymo integration in production, it's important to thoroughly test all functionality. This guide provides information on our testing environment and test profiles.
+Before launching your Zaymo integration in production, it's important to thoroughly test all functionality. This guide provides information on our testing approach and test profiles.
 
-## Test Environment
+## Integration Testing
 
-Zaymo provides a dedicated test environment that mirrors our production environment but doesn't process real orders or affect real customer data. Use this environment for all development and testing.
+Zaymo supports a flexible testing approach that allows you to test your integration using your own development environment. Instead of providing a separate test environment, we recommend implementing a "test mode" in your integration that:
 
-### Test API Base URL
+1. Prevents real orders from being processed
+2. Doesn't affect real customer data
+3. Returns predictable test responses
+
+### Setting Up Your Test Endpoint
+
+When implementing your integration endpoints, we recommend adding a test parameter that you can use to trigger test behavior:
 
 ```
-https://api-test.zaymo.com/v1
+https://your-api-endpoint.com/upsells/products?test=true
 ```
 
-### Test API Key
-
-When you partner with Zaymo, you'll receive both a production API key and a test API key. The test API key should be used for all development and testing activities.
+Or using a header:
 
 ```bash
-Authorization: Bearer YOUR_TEST_API_KEY
+X-Zaymo-Test-Mode: true
+```
+
+This approach allows you to test the integration without making changes to your production systems.
+
+### API Key
+
+When you partner with Zaymo, you'll receive an API key that can be used for both testing and production. Your integration should determine whether to process a request as a test based on the test parameter, not based on different API keys.
+
+```bash
+Authorization: Bearer YOUR_API_KEY
 ```
 
 <Warning>
-  Never use your production API key in development or testing environments.
+  Ensure your test mode is properly secured to prevent accidental test transactions in production.
 </Warning>
 
 ## Test Customer Profiles
 
-To help you test your integration, we provide several test customer profiles with different characteristics:
+To help you test your integration, we recommend creating test customer profiles with different characteristics:
 
 ### Standard Test Customer
 
 ```json
 {
-  "customer_id": "cus_test_12345",
+  "customer_id": "test_12345",
   "email": "test@example.com",
   "first_name": "Test",
   "last_name": "Customer"
@@ -48,7 +63,7 @@ To help you test your integration, we provide several test customer profiles wit
 
 ```json
 {
-  "customer_id": "cus_test_67890",
+  "customer_id": "test_67890",
   "email": "subscription@example.com",
   "first_name": "Subscription",
   "last_name": "Tester",
@@ -60,7 +75,7 @@ To help you test your integration, we provide several test customer profiles wit
 
 ```json
 {
-  "customer_id": "cus_test_54321",
+  "customer_id": "test_54321",
   "email": "cancelled@example.com",
   "first_name": "Cancelled",
   "last_name": "Subscriber",
@@ -70,17 +85,17 @@ To help you test your integration, we provide several test customer profiles wit
 
 ## Test Products
 
-The test environment includes a set of test products you can use for your integration:
+We recommend creating a set of test products in your system:
 
 | Product ID | Title | Price (cents) |
 | --- | --- | --- |
-| prod_test_12345 | Test Product A | 1995 |
-| prod_test_67890 | Test Product B | 2995 |
-| prod_test_54321 | Test Product C | 4995 |
+| test_12345 | Test Product A | 1995 |
+| test_67890 | Test Product B | 2995 |
+| test_54321 | Test Product C | 4995 |
 
 ## Test Discount Codes
 
-You can use the following discount codes in the test environment:
+Create test discount codes in your system:
 
 | Discount Code | Percentage Off | Description |
 | --- | --- | --- |
@@ -88,48 +103,47 @@ You can use the following discount codes in the test environment:
 | TEST20 | 20% | Standard 20% discount |
 | COMEBACK15 | 15% | Reactivation discount |
 
-## Testing Each Use Case
+## Testing Each Widget
 
 ### Testing Product Upsells
 
-1. Use the Get Products endpoint with a test customer ID
-2. Verify that product information is returned correctly
-3. Use the Add Product endpoint to add a test product
-4. Verify that the product was added successfully
+1. Implement the Get Products endpoint with test mode
+2. Implement the Add Product endpoint with test mode
+3. Verify that product information is returned correctly
+4. Verify that test purchases complete successfully without affecting production
 
 ### Testing Portal Functionality
 
-1. Use the Subscription Info endpoint with a test customer ID that has active subscriptions
-2. Verify that subscription information is returned correctly
-3. Use the Reschedule endpoint to change a delivery date
-4. Use the Send Now endpoint to request immediate shipment
-5. Verify that both operations complete successfully
+1. Implement the Subscription Info endpoint with test mode
+2. Implement the Reschedule endpoint with test mode
+3. Implement the Send Now endpoint with test mode
+4. Verify that subscription information is returned correctly
+5. Verify that test operations complete successfully without affecting production
 
 ### Testing Reactivation
 
-1. Use the List Cancelled Subscriptions endpoint with a test customer ID that has cancelled subscriptions
-2. Verify that cancelled subscription information is returned correctly
-3. Use the Reactivate endpoint to reactivate a subscription
-4. Verify that the subscription was reactivated successfully
+1. Implement the List Cancelled Subscriptions endpoint with test mode
+2. Implement the Reactivate endpoint with test mode
+3. Verify that cancelled subscription information is returned correctly
+4. Verify that test reactivations complete successfully without affecting production
 
 ## Error Testing
 
-It's important to test error scenarios as well as successful operations:
-
-- Test with invalid customer IDs
-- Test with invalid product IDs
-- Test with invalid subscription IDs
-- Test with invalid discount codes
-- Test with missing required parameters
-- Test with invalid date formats
+Test error scenarios in your test environment:
+- Invalid customer IDs
+- Invalid product IDs
+- Invalid subscription IDs
+- Invalid discount codes
+- Missing required parameters
+- Invalid date formats
 
 ## Going Live
 
-Once you've thoroughly tested your integration in the test environment, contact your Zaymo representative to coordinate the transition to production. They will:
+Once you've thoroughly tested your integration, contact your Zaymo representative to coordinate the transition to production. They will:
 
 1. Review your integration
 2. Provide guidance on any necessary adjustments
-3. Help you set up your production API key
+3. Help you set up for production use
 4. Coordinate the launch timeline
 
 <Card
