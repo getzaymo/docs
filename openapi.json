@@ -250,8 +250,10 @@
       "/zaymo/customer-portal/send-now": {
         "post": {
           "tags": ["Customer Portal"],
-          "summary": "Send Subscription Now",
-          "description": "Trigger immediate processing and shipment of the customer's subscription order.",
+          "summary": "Send Subscription Now (Optional)",
+          "description": "Trigger immediate processing and shipment of the customer's next upcoming subscription order. Implementation of this endpoint is optional - if not implemented, the 'Send Now' button will not be shown in the customer portal.",
+          "x-optional": true,
+          "x-implementation-priority": "low",
           "requestBody": {
             "description": "Customer information for immediate subscription processing",
             "content": {
@@ -371,7 +373,7 @@
         "get": {
           "tags": ["Reactivate"],
           "summary": "Get Cancelled Subscriptions",
-          "description": "Retrieve a list of the customer's cancelled subscriptions that are eligible for reactivation.",
+          "description": "Retrieve a list of the customer's cancelled subscriptions that are eligible for reactivation. Subscriptions will be displayed in the order they are returned by this endpoint.",
           "parameters": [
             {
               "name": "email",
@@ -521,21 +523,44 @@
           }
         },
         "SubscriptionItem": {
-          "allOf": [
-            {
-              "$ref": "#/components/schemas/Product"
+          "type": "object",
+          "required": [
+            "id",
+            "title",
+            "price",
+            "image",
+            "quantity"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier for the product"
             },
-            {
-              "type": "object",
-              "required": ["quantity"],
-              "properties": {
-                "quantity": {
-                  "type": "integer",
-                  "description": "Quantity of this product in the subscription"
-                }
-              }
+            "title": {
+              "type": "string",
+              "description": "Name or title of the product"
+            },
+            "price": {
+              "type": "number",
+              "format": "float",
+              "description": "Price of the product in the subscription",
+              "example": 29.99
+            },
+            "image": {
+              "type": "string",
+              "format": "uri",
+              "description": "Image URL string for the product"
+            },
+            "description": {
+              "type": "string",
+              "description": "Optional description of the product"
+            },
+            "quantity": {
+              "type": "integer",
+              "description": "Quantity of this product in the subscription",
+              "example": 2
             }
-          ]
+          }
         },
         "ProductsResponse": {
           "type": "object",
@@ -585,7 +610,8 @@
                 "next_billing_date": {
                   "type": "string",
                   "format": "date",
-                  "description": "The date of the next scheduled billing"
+                  "description": "The date of the next scheduled billing",
+                  "example": "2024-02-15"
                 },
                 "items": {
                   "type": "array",
@@ -594,18 +620,23 @@
                   },
                   "description": "Products included in the subscription with quantities"
                 },
-                "shipping_total": {
-                  "type": "integer",
-                  "description": "Total shipping cost for the subscription (in cents)"
+                "shipping_total_cost": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Total shipping cost for the subscription. This can be an estimated amount. If you do not have a shipping cost, you can return 0.",
+                  "example": 5.99
                 },
                 "order_discount_total": {
-                  "type": "integer",
-                  "description": "Total discount applied to the subscription (in cents)"
+                  "type": "number",
+                  "format": "float",
+                  "description": "Total discount applied to this subscription order. This should not include discounts already applied to item prices. If there are no additional discounts, you can return 0.",
+                  "example": 5.00
                 },
                 "customer_tax_rate": {
                   "type": "number",
                   "format": "float",
-                  "description": "Tax rate applied to the customer's subscription (as decimal, e.g., 0.08 for 8%)"
+                  "description": "Tax rate applied to the customer's subscription (as decimal, e.g., 0.08 for 8%). Used to calculate an estimated tax amount on current items and upsells. If you do not have a tax rate, you can return 0.",
+                  "example": 0.08
                 }
               }
             }
@@ -648,7 +679,6 @@
           "required": [
             "subscription_id",
             "title",
-            "frequency",
             "products"
           ],
           "properties": {
@@ -658,11 +688,7 @@
             },
             "title": {
               "type": "string",
-              "description": "Title or name of the subscription"
-            },
-            "frequency": {
-              "type": "string",
-              "description": "Billing frequency of the subscription (e.g., 'monthly', 'weekly', 'every 2 weeks')"
+              "description": "Title or name of the subscription. Often the frequency is used here ie. 'Every Month' or 'Every 6 Weeks'"
             },
             "products": {
               "type": "array",
