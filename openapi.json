@@ -18,9 +18,16 @@
         "apiKeyAuth": []
       }
     ],
+    "tags": [
+      {
+        "name": "Upsells",
+        "description": "Endpoints for managing product upsells in emails"
+      }
+    ],
     "paths": {
-      "/upsells/products": {
+      "/zaymo/upsells/products": {
         "get": {
+          "tags": ["Upsells"],
           "summary": "Get Products",
           "description": "Retrieve product information for in-email product blocks. Returns a list of recommended products for in-email upsells. Optionally, if a specific customer's email is provided as a search parameter, the products can be tailored to that customer.",
           "parameters": [
@@ -59,8 +66,9 @@
           }
         }
       },
-      "/upsells/add-product": {
+      "/zaymo/upsells/add-product": {
         "post": {
+          "tags": ["Upsells"],
           "summary": "Add Product",
           "description": "Add a product to a customer's order directly from email. This endpoint processes a customer's product selection from the email upsell widget.",
           "requestBody": {
@@ -80,7 +88,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/AddProductResponse"
+                    "$ref": "#/components/schemas/SuccessResponse"
                   }
                 }
               }
@@ -90,7 +98,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/ErrorWithDetails"
+                    "$ref": "#/components/schemas/Error"
                   }
                 }
               }
@@ -190,110 +198,31 @@
         "AddProductRequest": {
           "type": "object",
           "required": [
-            "customer_id",
-            "product_id",
-            "onetime"
+            "email",
+            "product_id"
           ],
           "properties": {
-            "customer_id": {
+            "email": {
               "type": "string",
-              "description": "The unique identifier for the customer"
+              "format": "email",
+              "description": "The email address of the customer"
             },
             "product_id": {
               "type": "string",
-              "description": "The unique identifier for the selected product"
-            },
-            "onetime": {
-              "type": "boolean",
-              "description": "Whether this is a one-time purchase (true) or should be added to a subscription (false)"
-            },
-            "variant_selections": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              },
-              "description": "Key-value pairs of variant option names and selected values",
-              "example": {
-                "Size": "4oz",
-                "Color": "Blue"
-              }
-            },
-            "discount_code": {
-              "type": "string",
-              "description": "Discount code to apply to the purchase"
+              "description": "The unique identifier for the selected product (from the get products endpoint)"
             }
           }
         },
-        "AddProductResponse": {
+        "SuccessResponse": {
           "type": "object",
           "required": [
-            "success",
-            "data"
+            "success"
           ],
           "properties": {
             "success": {
               "type": "boolean",
+              "example": true,
               "description": "Indicates if the request was successful"
-            },
-            "data": {
-              "type": "object",
-              "required": [
-                "order_id",
-                "product"
-              ],
-              "properties": {
-                "order_id": {
-                  "type": "string",
-                  "description": "Unique identifier for the order or subscription that the product was added to"
-                },
-                "product": {
-                  "type": "object",
-                  "required": [
-                    "id",
-                    "title",
-                    "price",
-                    "final_price"
-                  ],
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "description": "Unique identifier for the product"
-                    },
-                    "title": {
-                      "type": "string",
-                      "description": "Name or title of the product"
-                    },
-                    "price": {
-                      "type": "integer",
-                      "description": "Price of the product before any discounts (in cents)"
-                    },
-                    "final_price": {
-                      "type": "integer",
-                      "description": "Final price after any discounts (in cents)"
-                    },
-                    "variant_selections": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "string"
-                      },
-                      "description": "The selected variants for the product"
-                    }
-                  }
-                },
-                "discount_applied": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "description": "Discount code that was applied"
-                    },
-                    "amount": {
-                      "type": "integer",
-                      "description": "Amount of the discount (in cents)"
-                    }
-                  }
-                }
-              }
             }
           }
         },
@@ -326,42 +255,6 @@
               }
             }
           }
-        },
-        "ErrorWithDetails": {
-          "allOf": [
-            {
-              "$ref": "#/components/schemas/Error"
-            },
-            {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "object",
-                      "properties": {
-                        "field": {
-                          "type": "string",
-                          "description": "Field that caused the error"
-                        },
-                        "reason": {
-                          "type": "string",
-                          "description": "Specific reason for the error"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          ]
         }
       },
       "securitySchemes": {

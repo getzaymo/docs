@@ -32,16 +32,7 @@
     }
   ],
   "anchors": [
-    {
-      "name": "Site",
-      "icon": "globe",
-      "url": "https://zaymo.com"
-    },
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://zaymo.com/blog"
-    }
+    
   ],
   "navigation": [
     {
