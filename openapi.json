@@ -250,10 +250,8 @@
       "/zaymo/customer-portal/send-now": {
         "post": {
           "tags": ["Customer Portal"],
-          "summary": "Send Subscription Now (Optional)",
-          "description": "Trigger immediate processing and shipment of the customer's next upcoming subscription order. Implementation of this endpoint is optional - if not implemented, the 'Send Now' button will not be shown in the customer portal.",
-          "x-optional": true,
-          "x-implementation-priority": "low",
+          "summary": "Send Subscription Now",
+          "description": "Trigger immediate processing and shipment of the customer's next upcoming subscription order. This endpoint is required for the 'Send Now' button to be shown in the customer portal.",
           "requestBody": {
             "description": "Customer information for immediate subscription processing",
             "content": {
@@ -313,7 +311,7 @@
         "post": {
           "tags": ["Customer Portal"],
           "summary": "Delay Subscription",
-          "description": "Postpone the customer's next subscription billing and shipment to a new date.",
+          "description": "Postpone the customer's next subscription billing and shipment to a new date. This endpoint is required for the 'Delay Subscription' button to be shown in the customer portal.",
           "requestBody": {
             "description": "Customer information and new billing date for subscription delay",
             "content": {
@@ -501,12 +499,16 @@
               "description": "Name or title of the product"
             },
             "price": {
-              "type": "integer",
-              "description": "Price of the product before any discounts (in cents)"
+              "type": "number",
+              "format": "float",
+              "description": "Price of the product before any discounts",
+              "example": 29.99
             },
             "compare_at_price": {
-              "type": "integer",
-              "description": "Strike through price to be shown with product (in cents)"
+              "type": "number",
+              "format": "float",
+              "description": "Strike through price to be shown with product",
+              "example": 39.99
             },
             "images": {
               "type": "array",
@@ -759,6 +761,21 @@
             "product_id": {
               "type": "string",
               "description": "The unique identifier for the selected product (from the get products endpoint)"
+            },
+            "quantity": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "description": "The quantity of the product to add to the order"
+            },
+            "discount_code": {
+              "type": "string",
+              "description": "Optional discount code to apply to the product/subscription."
+            },
+            "one_time": {
+              "type": "boolean",
+              "default": false,
+              "description": "If true, the product will only be added to the next subscription billing cycle. Default is false."
             }
           }
         },

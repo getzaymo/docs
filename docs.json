@@ -47,6 +47,7 @@
           },
           {
             "group": "Endpoints",
+            "defaultOpen": true,
             "openapi": {
               "source": "openapi.json"
             }

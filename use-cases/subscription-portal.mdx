@@ -5,10 +5,20 @@ description: 'Enable subscribers to manage subscriptions directly from email'
 
 The Subscription Portal widget allows subscribers to manage their subscriptions directly from email, including rescheduling deliveries or requesting immediate shipment.
 
-<Frame>
-  <img src="/images/portal-example.gif" alt="Subscription portal example" />
-  *Example of subscription management in email*
-</Frame>
+<Card>
+  <Frame>
+    <img src="/images/PortalDelay.gif" alt="Delay subscription example" />
+  </Frame>
+  **Delay Subscription**
+  *Subscribers can postpone their next delivery*
+</Card>
+<Card>
+  <Frame>
+    <img src="/images/PortalSendNow.gif" alt="Send now example" />
+  </Frame>
+  **Send Now**
+  *Subscribers can request immediate shipment*
+</Card>
 
 ## How It Works
 
@@ -19,15 +29,11 @@ The Subscription Portal widget allows subscribers to manage their subscriptions 
 
 ## Required Endpoints
 
-Under Construction 🚧
-
-{/* 
 | Endpoint | Purpose | Required |
 | --- | --- | --- |
-| [Subscription Info](/api-reference/portal/subscription-info) | Retrieve current subscription details | Yes |
-| [Reschedule](/api-reference/portal/reschedule) | Process subscription rescheduling requests | Yes |
-| [Send Now](/api-reference/portal/send-now) | Process immediate shipment requests | Yes |
-*/}
+| [Get Current Subscription](/api-reference/customer-portal/subscription) | Retrieve current subscription details | Yes |
+| [Delay Subscription](/api-reference/customer-portal/delay) | Process subscription rescheduling requests | No |
+| [Send Subscription Now](/api-reference/customer-portal/send-now) | Process immediate shipment requests | No |
 
 ## Getting Started
 
