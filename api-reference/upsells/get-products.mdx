@@ -6,56 +6,43 @@ description: 'Retrieve product information to display in email'
 
 # Get Products
 
-This endpoint retrieves product information that will be displayed in the email upsell widget. You can either return a dynamic list of products based on the customer's preferences or a static list of products for all customers.
+This endpoint is used to retrieve product information for in-email product blocks. It should return a list of recommended products for in-email upsells. Optionally, if a specific customer's email is provided as a search parameter, the products can be tailored to that customer.
 
-## Required Data
+**Parameter Options:**
+- If `email` parameter is provided: Returns specific products tailored for that user
+- If `email` parameter is not provided: Returns generic products for all customers
 
-### Product Information
-- **Product ID**: Unique identifier for each product
+## Product Fields
+
+- **Product ID**: Unique identifier for each product in your system (used with the add-product endpoint)
 - **Title**: Name or title of the product
 - **Price**: Price of the product before any discounts (in cents)
-- **Images**: Array of image URLs for the product
+- **Compare At Price** (optional): Strike through price to be shown with product
+- **Images**: Array of one or more image URLs for the product
 - **Description** (optional): Brief description of the product
-- **Variants** (if applicable): Product options such as size, color, etc.
 
-### Customer Information
-- **Customer ID**: Unique identifier for the customer
-- **One-time purchase flag**: Whether this is a one-time purchase or subscription addition
-- **Discount code** (optional): Any applicable discount code
+## Notes
 
-## Optional Parameters
-
-### Purchase Type Options
-- **One-time purchase**: Allow customers to make a single purchase
-- **Add to existing subscription**: Add the product to a customer's current subscription
-- **Create new subscription**: Start a new subscription with this product
-
-### Subscription Options (when applicable)
-- **Frequency**: Weekly, monthly, etc.
-- **Delivery day preference**: Preferred day of delivery
-- **Number of items per delivery**: Quantity per delivery cycle
-
-### Discount Application
-- **Apply to first order only**: One-time discount
-- **Apply to first X orders**: Limited-time discount
-- **Apply to all future orders**: Ongoing discount
-
-### Upsell Display Options
-- **Show product ratings/reviews**: Display social proof
-- **Display limited-time offer countdown**: Create urgency
-- **Show inventory status**: Indicate limited availability
-- **Highlight savings amount**: Show discount value
+- Images should be optimized for email (recommended size: 600x600px)
+- Product descriptions should be concise (under 100 characters)
 
 ## Request
 
-<ParamField path="customer_id" type="string" required>
-  The unique identifier for the customer.
+<ParamField path="email" type="string">
+  The email address of the customer opening the email. If provided, return specific product recommendations for that user. If not provided, return generic product recommendations.
 </ParamField>
 
 ### Example Request
 
+**Without Email (returns generic products):**
 ```bash
-curl -X GET "https://api.zaymo.com/v1/upsells/products?customer_id=cus_12345" \
+curl -X GET "https://api.zaymo.com/v1/upsells/products" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+**With Email Parameter (returns specific products for user):**
+```bash
+curl -X GET "https://api.zaymo.com/v1/upsells/products?email=customer@example.com" \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
@@ -78,31 +65,14 @@ curl -X GET "https://api.zaymo.com/v1/upsells/products?customer_id=cus_12345" \
         <ResponseField name="price" type="number">
           Price of the product before any discounts (in cents).
         </ResponseField>
-        <ResponseField name="images" type="array">
-          Array of image URLs for the product.
+        <ResponseField name="compare_at_price" type="number" optional>
+          Strike through price to be shown with product (in cents).
+        </ResponseField>
+        <ResponseField name="images" type="string[]">
+          Array of image URL strings for the product.
         </ResponseField>
         <ResponseField name="description" type="string" optional>
           Optional description of the product.
-        </ResponseField>
-        <ResponseField name="variants" type="array" optional>
-          <Expandable title="Variant Object">
-            <ResponseField name="option_name" type="string">
-              Name of the variant option (e.g., "Size", "Color").
-            </ResponseField>
-            <ResponseField name="option_values" type="array">
-              Array of possible values for this option.
-            </ResponseField>
-          </Expandable>
-        </ResponseField>
-      </Expandable>
-    </ResponseField>
-    <ResponseField name="discounts" type="array" optional>
-      <Expandable title="Discount Object">
-        <ResponseField name="code" type="string">
-          Discount code.
-        </ResponseField>
-        <ResponseField name="percentage_off" type="number">
-          Percentage discount (e.g., 10 for 10% off).
         </ResponseField>
       </Expandable>
     </ResponseField>
@@ -120,17 +90,12 @@ curl -X GET "https://api.zaymo.com/v1/upsells/products?customer_id=cus_12345" \
         "id": "prod_12345",
         "title": "Premium Moisturizer",
         "price": 2995,
+        "compare_at_price": 3495,
         "images": [
           "https://example.com/images/moisturizer-1.jpg",
           "https://example.com/images/moisturizer-2.jpg"
         ],
-        "description": "Our best-selling moisturizer for all skin types",
-        "variants": [
-          {
-            "option_name": "Size",
-            "option_values": ["2oz", "4oz", "8oz"]
-          }
-        ]
+        "description": "Our best-selling moisturizer for all skin types"
       },
       {
         "id": "prod_67890",
@@ -141,16 +106,6 @@ curl -X GET "https://api.zaymo.com/v1/upsells/products?customer_id=cus_12345" \
         ],
         "description": "Gentle cleanser for daily use"
       }
-    ],
-    "discounts": [
-      {
-        "code": "WELCOME10",
-        "percentage_off": 10
-      },
-      {
-        "code": "SUMMER20",
-        "percentage_off": 20
-      }
     ]
   }
 }
@@ -159,17 +114,6 @@ curl -X GET "https://api.zaymo.com/v1/upsells/products?customer_id=cus_12345" \
 ## Error Responses
 
 <AccordionGroup>
-  <Accordion title="Invalid Customer ID">
-    ```json
-    {
-      "success": false,
-      "error": {
-        "code": "invalid_request",
-        "message": "Invalid customer_id provided"
-      }
-    }
-    ```
-  </Accordion>
   <Accordion title="Authentication Error">
     ```json
     {
@@ -182,10 +126,3 @@ curl -X GET "https://api.zaymo.com/v1/upsells/products?customer_id=cus_12345" \
     ```
   </Accordion>
 </AccordionGroup>
-
-## Notes
-
-- We recommend limiting the product list to 3-5 products for optimal email display
-- Images should be optimized for email (recommended size: 600x600px)
-- Product descriptions should be concise (under 100 characters)
-- If using variants, keep options simple to avoid complexity in the email interface
