@@ -22,6 +22,14 @@
       {
         "name": "Upsells",
         "description": "Endpoints for managing product upsells in emails"
+      },
+      {
+        "name": "Customer Portal",
+        "description": "Endpoints for customer subscription management portal"
+      },
+      {
+        "name": "Reactivate",
+        "description": "Endpoints for reactivating cancelled subscriptions"
       }
     ],
     "paths": {
@@ -125,6 +133,350 @@
             }
           }
         }
+      },
+      "/zaymo/upsells/undo-add-product": {
+        "post": {
+          "tags": ["Upsells"],
+          "summary": "Undo Add Product (Optional)",
+          "description": "Remove a product from a customer's order that was previously added using the add-product endpoint. Implementation of this endpoint is optional - if not implemented, customers will not be able to undo their purchases in the email upsell widget.",
+          "x-optional": true,
+          "x-implementation-priority": "low",
+          "requestBody": {
+            "description": "Product and customer information for removing from order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemoveProductRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Product successfully removed from order",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/SuccessResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Authentication error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Product or customer not found, or product was not in the order",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/zaymo/customer-portal/subscription": {
+        "get": {
+          "tags": ["Customer Portal"],
+          "summary": "Get Current Subscription",
+          "description": "Retrieve the customer's current active subscription details including billing information and items. If the customer has multiple subscriptions, we recommend returning the next upcoming subscription.",
+          "parameters": [
+            {
+              "name": "email",
+              "in": "query",
+              "description": "The email address of the customer",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "email"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response with subscription details",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CurrentSubscriptionResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Authentication error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Customer or subscription not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/zaymo/customer-portal/send-now": {
+        "post": {
+          "tags": ["Customer Portal"],
+          "summary": "Send Subscription Now",
+          "description": "Trigger immediate processing and shipment of the customer's subscription order.",
+          "requestBody": {
+            "description": "Customer information for immediate subscription processing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SendSubscriptionRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Subscription successfully processed for immediate shipment",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/SuccessResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request or subscription cannot be processed now",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Authentication error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Customer or subscription not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/zaymo/customer-portal/delay": {
+        "post": {
+          "tags": ["Customer Portal"],
+          "summary": "Delay Subscription",
+          "description": "Postpone the customer's next subscription billing and shipment to a new date.",
+          "requestBody": {
+            "description": "Customer information and new billing date for subscription delay",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DelaySubscriptionRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Subscription successfully delayed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/SuccessResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request or invalid date",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Authentication error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Customer or subscription not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/zaymo/reactivate/cancelled-subscriptions": {
+        "get": {
+          "tags": ["Reactivate"],
+          "summary": "Get Cancelled Subscriptions",
+          "description": "Retrieve a list of the customer's cancelled subscriptions that are eligible for reactivation.",
+          "parameters": [
+            {
+              "name": "email",
+              "in": "query",
+              "description": "The email address of the customer",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "email"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response with cancelled subscriptions list",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CancelledSubscriptionsResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Authentication error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Customer not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/zaymo/reactivate/subscription": {
+        "post": {
+          "tags": ["Reactivate"],
+          "summary": "Reactivate Cancelled Subscription",
+          "description": "Reactivate a previously cancelled subscription for the customer.",
+          "requestBody": {
+            "description": "Subscription reactivation information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReactivateSubscriptionRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Subscription successfully reactivated",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/SuccessResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request or subscription cannot be reactivated",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Authentication error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Customer or subscription not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "components": {
@@ -168,6 +520,23 @@
             }
           }
         },
+        "SubscriptionItem": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/Product"
+            },
+            {
+              "type": "object",
+              "required": ["quantity"],
+              "properties": {
+                "quantity": {
+                  "type": "integer",
+                  "description": "Quantity of this product in the subscription"
+                }
+              }
+            }
+          ]
+        },
         "ProductsResponse": {
           "type": "object",
           "required": [
@@ -195,6 +564,160 @@
             }
           }
         },
+        "CurrentSubscriptionResponse": {
+          "type": "object",
+          "required": [
+            "success",
+            "data"
+          ],
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "description": "Indicates if the request was successful"
+            },
+            "data": {
+              "type": "object",
+              "required": [
+                "next_billing_date",
+                "items"
+              ],
+              "properties": {
+                "next_billing_date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "The date of the next scheduled billing"
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SubscriptionItem"
+                  },
+                  "description": "Products included in the subscription with quantities"
+                },
+                "shipping_total": {
+                  "type": "integer",
+                  "description": "Total shipping cost for the subscription (in cents)"
+                },
+                "order_discount_total": {
+                  "type": "integer",
+                  "description": "Total discount applied to the subscription (in cents)"
+                },
+                "customer_tax_rate": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Tax rate applied to the customer's subscription (as decimal, e.g., 0.08 for 8%)"
+                }
+              }
+            }
+          }
+        },
+        "SendSubscriptionRequest": {
+          "type": "object",
+          "required": [
+            "email"
+          ],
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "The email address of the customer"
+            }
+          }
+        },
+        "DelaySubscriptionRequest": {
+          "type": "object",
+          "required": [
+            "email",
+            "new_date"
+          ],
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "The email address of the customer"
+            },
+            "new_date": {
+              "type": "string",
+              "format": "date",
+              "description": "The new date for the next billing cycle"
+            }
+          }
+        },
+        "CancelledSubscription": {
+          "type": "object",
+          "required": [
+            "subscription_id",
+            "title",
+            "frequency",
+            "products"
+          ],
+          "properties": {
+            "subscription_id": {
+              "type": "string",
+              "description": "Unique identifier for the cancelled subscription"
+            },
+            "title": {
+              "type": "string",
+              "description": "Title or name of the subscription"
+            },
+            "frequency": {
+              "type": "string",
+              "description": "Billing frequency of the subscription (e.g., 'monthly', 'weekly', 'every 2 weeks')"
+            },
+            "products": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/SubscriptionItem"
+              },
+              "description": "Products that were included in the subscription with quantities"
+            }
+          }
+        },
+        "CancelledSubscriptionsResponse": {
+          "type": "object",
+          "required": [
+            "success",
+            "data"
+          ],
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "description": "Indicates if the request was successful"
+            },
+            "data": {
+              "type": "object",
+              "required": [
+                "subscriptions"
+              ],
+              "properties": {
+                "subscriptions": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CancelledSubscription"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ReactivateSubscriptionRequest": {
+          "type": "object",
+          "required": [
+            "email",
+            "subscription_id"
+          ],
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "The email address of the customer"
+            },
+            "subscription_id": {
+              "type": "string",
+              "description": "The unique identifier for the subscription to reactivate"
+            }
+          }
+        },
         "AddProductRequest": {
           "type": "object",
           "required": [
@@ -210,6 +733,24 @@
             "product_id": {
               "type": "string",
               "description": "The unique identifier for the selected product (from the get products endpoint)"
+            }
+          }
+        },
+        "RemoveProductRequest": {
+          "type": "object",
+          "required": [
+            "email",
+            "product_id"
+          ],
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "The email address of the customer"
+            },
+            "product_id": {
+              "type": "string",
+              "description": "The unique identifier for the product to be removed from the order"
             }
           }
         },
@@ -262,7 +803,7 @@
           "type": "apiKey",
           "in": "header",
           "name": "X-Zaymo-API-Key",
-          "description": "API key authentication using the key provided to Zaymo"
+          "description": "Zaymo will authenticate requests using the API key you provide"
         }
       }
     }

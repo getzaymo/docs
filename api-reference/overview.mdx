@@ -22,58 +22,11 @@ When Zaymo makes requests to your API, we will append specific paths to your bas
 https://api.yourdomain.com/zaymo/upsell
 ```
 
-All API endpoints in this documentation will follow this pattern, with `/zaymo` as the prefix for all Zaymo-related routes.
+All API endpoints in this documentation will follow this pattern, with `/zaymo/` as the prefix for all Zaymo-related routes.
 
-## <a id="authentication"></a>Authentication
+## Authentication
 
-All API endpoints should be secured using API key authentication. Zaymo will authenticate requests to your API using a custom header-based API key system. You should provide Zaymo with an API key that our system will include in all requests to your endpoints.
-
-### API Key Implementation
-
-Your API should validate the API key included in the `X-Zaymo-API-Key` header of all incoming requests from Zaymo:
-
-```bash
-X-Zaymo-API-Key: YOUR_PROVIDED_API_KEY
-```
-
-This authentication method is defined in our OpenAPI specification as `apiKeyAuth` and ensures secure communication between Zaymo's systems and your API endpoints.
-
-### API Key Security Requirements
-
-<Warning>
-  Keep your API key secure and implement proper validation. Reject any requests that don't include a valid API key in the `X-Zaymo-API-Key` header.
-</Warning>
-
-Your implementation should:
-- Validate that the `X-Zaymo-API-Key` header is present in every request
-- Verify that the provided API key matches the one you've given to Zaymo
-- Return a `401 Unauthorized` response for requests with missing or invalid API keys
-- Return a `403 Forbidden` response if the API key exists but lacks permissions for the requested operation
-
-### Example Request with Authentication
-
-When Zaymo makes a request to your API, it will look something like this:
-
-```bash
-curl -X POST https://api.yourdomain.com/zaymo/upsells/add-product \
-  -H "X-Zaymo-API-Key: YOUR_PROVIDED_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "customer_id": "cust_12345",
-    "product_id": "prod_67890",
-    "onetime": true
-  }'
-```
-
-### Authentication Validation Flow
-
-1. **Header Check**: Verify the `X-Zaymo-API-Key` header exists
-2. **Key Validation**: Confirm the API key matches your stored value
-3. **Permission Check**: Ensure the key has access to the requested endpoint
-4. **Request Processing**: Process the request if authentication succeeds
-5. **Error Response**: Return appropriate error codes for authentication failures
-
-Your API should validate the API key before processing any request data to ensure security.
+All API endpoints should require authentication using an API key header. For detailed information about implementing authentication, see the [Authentication](/api-reference/authentication) page.
 
 ## Response Format
 
@@ -98,33 +51,17 @@ When an error occurs, your API should return an appropriate HTTP status code alo
   "error": {
     "code": "invalid_request",
     "message": "A descriptive error message",
-    "details": {} // Additional error details when available
   }
 }
 ```
-
-### Recommended Error Codes
-
-| HTTP Status | Error Code | Description |
-| --- | --- | --- |
-| 400 | `invalid_request` | The request was malformed or missing required parameters |
-| 401 | `unauthorized` | Invalid or missing API key |
-| 403 | `forbidden` | The API key doesn't have permission to perform the request |
-| 404 | `not_found` | The requested resource was not found |
-| 429 | `rate_limit_exceeded` | Too many requests in a given amount of time |
-| 500 | `server_error` | An unexpected error occurred on your server |
 
 ## Rate Limits
 
 If you implement rate limiting on your API, please inform Zaymo of your limits so we can optimize our requests accordingly.
 
-## Testing
-
-For testing purposes, we recommend setting up a test user in your system. You can then  the test user's email address in the `email` parameter of our API requestuses.
-
 <Card
   title="Need Help?"
   icon="circle-question"
 >
-  If you have any questions or need assistance with your API implementation, please contact our support team at [daniel@zaymo.com](mailto:daniel@zaymo.com).
+  If you have any questions or need assistance with your API implementation, please contact our support team at [support@zaymo.com](mailto:support@zaymo.com).
 </Card>

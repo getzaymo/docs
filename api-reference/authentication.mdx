@@ -1,0 +1,41 @@
+---
+title: 'Authentication'
+description: 'How to authenticate requests from Zaymo'
+---
+
+## Authentication
+
+All API endpoints should be secured using API key authentication. You will provide Zaymo with an API key, and Zaymo will attach it to all requests to your API using the following header:
+
+### API Key Header
+
+Your API should validate that all requests from Zaymo include the API key in the `X-Zaymo-API-Key` header. If the header is missing or invalid, your API should return a `401 Unauthorized` response.
+
+```bash
+X-Zaymo-API-Key: YOUR_PROVIDED_API_KEY
+```
+
+### API Key Security Requirements
+
+<Warning>
+  Keep your API key secure and implement proper validation. Reject any requests that don't include a valid API key in the `X-Zaymo-API-Key` header.
+</Warning>
+
+Your implementation should:
+- Validate that the `X-Zaymo-API-Key` header is present in every request
+- Verify that the provided API key matches the one you've given to Zaymo
+- Return a `401 Unauthorized` response for requests with missing or invalid API keys
+
+### Example Request with Authentication
+
+When Zaymo makes a request to your API, it will look something like this:
+
+```bash
+curl -X POST https://api.yourdomain.com/zaymo/upsells/add-product \
+  -H "X-Zaymo-API-Key: YOUR_PROVIDED_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "customer@example.com",
+    "product_id": "prod_67890"
+  }'
+```

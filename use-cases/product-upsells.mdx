@@ -1,0 +1,45 @@
+---
+title: Product Upsells
+description: 'Allow customers to purchase products directly from email'
+---
+
+The Product Upsells widget allows customers to purchase products or add them to subscriptions directly from an email with just one click, without ever leaving their inbox.
+
+<Frame caption="Example of a product upsell in email">
+  <img src="/images/MultiProductUpsells.gif" alt="Product upsell example" />
+</Frame>
+
+## How It Works
+
+1. Customer receives an email with an embedded product block
+2. Customer selects a product and clicks to purchase
+3. The product is instantly purchased or added to their subscription
+4. Customer receives confirmation without ever leaving their email
+
+## Required Endpoints
+
+| Endpoint | Purpose | Required |
+| --- | --- | --- |
+| [Get Products](/api-reference/upsells/get-products) | Retrieve product information to display in email | Yes |
+| [Add Product](/api-reference/upsells/add-product) | Process the customer's purchase or subscription addition | Yes |
+
+## Getting Started
+
+Ready to implement Product Upsells? This widget typically provides the quickest path to value for most businesses.
+
+<CardGroup cols={2}>
+  <Card
+    title="API Reference"
+    icon="code"
+    href="/api-reference/introduction"
+  >
+    Explore our API documentation
+  </Card>
+  <Card
+    title="Authentication"
+    icon="key"
+    href="/api-reference/introduction#authentication"
+  >
+    Learn how to authenticate your API requests
+  </Card>
+</CardGroup> 
