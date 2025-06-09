@@ -8,10 +8,6 @@ description: 'Retrieve product information to display in email'
 
 This endpoint is used to retrieve product information for in-email product blocks. It should return a list of recommended products for in-email upsells. Optionally, if a specific customer's email is provided as a search parameter, the products can be tailored to that customer.
 
-**Parameter Options:**
-- If `email` parameter is provided: Returns specific products tailored for that user
-- If `email` parameter is not provided: Returns generic products for all customers
-
 ## Product Fields
 
 - **Product ID**: Unique identifier for each product in your system (used with the add-product endpoint)
@@ -21,29 +17,33 @@ This endpoint is used to retrieve product information for in-email product block
 - **Images**: Array of one or more image URLs for the product
 - **Description** (optional): Brief description of the product
 
+## Optional Request Parameters
+
+<ParamField path="email" type="string" optional>
+  The email address of the customer opening the email.
+  
+  **Behavior:**
+  - If provided: Returns specific product recommendations tailored for that user
+  - If not provided: Returns generic product recommendations for all customers
+</ParamField>
+
 ## Notes
 
 - Images should be optimized for email (recommended size: 600x600px)
 - Product descriptions should be concise (under 100 characters)
-
-## Request
-
-<ParamField path="email" type="string">
-  The email address of the customer opening the email. If provided, return specific product recommendations for that user. If not provided, return generic product recommendations.
-</ParamField>
 
 ### Example Request
 
 **Without Email (returns generic products):**
 ```bash
 curl -X GET "https://api.zaymo.com/v1/upsells/products" \
-  -H "Authorization: Bearer YOUR_API_KEY"
+  -H "X-Zaymo-API-Key: YOUR_API_KEY"
 ```
 
 **With Email Parameter (returns specific products for user):**
 ```bash
 curl -X GET "https://api.zaymo.com/v1/upsells/products?email=customer@example.com" \
-  -H "Authorization: Bearer YOUR_API_KEY"
+  -H "X-Zaymo-API-Key: YOUR_API_KEY"
 ```
 
 ## Response

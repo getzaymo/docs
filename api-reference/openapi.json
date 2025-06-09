@@ -1,0 +1,376 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "title": "Zaymo Custom Integration API",
+      "description": "API for managing product upsells and customer interactions in email campaigns",
+      "license": {
+        "name": "MIT"
+      },
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "https://api.your-domain.com/example/"
+      }
+    ],
+    "security": [
+      {
+        "apiKeyAuth": []
+      }
+    ],
+    "paths": {
+      "/upsells/products": {
+        "get": {
+          "summary": "Get Products",
+          "description": "Retrieve product information for in-email product blocks. Returns a list of recommended products for in-email upsells. Optionally, if a specific customer's email is provided as a search parameter, the products can be tailored to that customer.",
+          "parameters": [
+            {
+              "name": "email",
+              "in": "query",
+              "description": "The email address of the customer opening the email. If provided, returns specific product recommendations tailored for that user. If not provided, returns generic product recommendations for all customers.",
+              "required": false,
+              "schema": {
+                "type": "string",
+                "format": "email"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response with product list",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ProductsResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Authentication error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/upsells/add-product": {
+        "post": {
+          "summary": "Add Product",
+          "description": "Add a product to a customer's order directly from email. This endpoint processes a customer's product selection from the email upsell widget.",
+          "requestBody": {
+            "description": "Product and customer information for adding to order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddProductRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Product successfully added to order",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/AddProductResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorWithDetails"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Authentication error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Product or customer not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Product": {
+          "type": "object",
+          "required": [
+            "id",
+            "title",
+            "price",
+            "images"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier for the product"
+            },
+            "title": {
+              "type": "string",
+              "description": "Name or title of the product"
+            },
+            "price": {
+              "type": "integer",
+              "description": "Price of the product before any discounts (in cents)"
+            },
+            "compare_at_price": {
+              "type": "integer",
+              "description": "Strike through price to be shown with product (in cents)"
+            },
+            "images": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uri"
+              },
+              "description": "Array of image URL strings for the product"
+            },
+            "description": {
+              "type": "string",
+              "description": "Optional description of the product"
+            }
+          }
+        },
+        "ProductsResponse": {
+          "type": "object",
+          "required": [
+            "success",
+            "data"
+          ],
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "description": "Indicates if the request was successful"
+            },
+            "data": {
+              "type": "object",
+              "required": [
+                "products"
+              ],
+              "properties": {
+                "products": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "AddProductRequest": {
+          "type": "object",
+          "required": [
+            "customer_id",
+            "product_id",
+            "onetime"
+          ],
+          "properties": {
+            "customer_id": {
+              "type": "string",
+              "description": "The unique identifier for the customer"
+            },
+            "product_id": {
+              "type": "string",
+              "description": "The unique identifier for the selected product"
+            },
+            "onetime": {
+              "type": "boolean",
+              "description": "Whether this is a one-time purchase (true) or should be added to a subscription (false)"
+            },
+            "variant_selections": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "description": "Key-value pairs of variant option names and selected values",
+              "example": {
+                "Size": "4oz",
+                "Color": "Blue"
+              }
+            },
+            "discount_code": {
+              "type": "string",
+              "description": "Discount code to apply to the purchase"
+            }
+          }
+        },
+        "AddProductResponse": {
+          "type": "object",
+          "required": [
+            "success",
+            "data"
+          ],
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "description": "Indicates if the request was successful"
+            },
+            "data": {
+              "type": "object",
+              "required": [
+                "order_id",
+                "product"
+              ],
+              "properties": {
+                "order_id": {
+                  "type": "string",
+                  "description": "Unique identifier for the order or subscription that the product was added to"
+                },
+                "product": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "title",
+                    "price",
+                    "final_price"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Unique identifier for the product"
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "Name or title of the product"
+                    },
+                    "price": {
+                      "type": "integer",
+                      "description": "Price of the product before any discounts (in cents)"
+                    },
+                    "final_price": {
+                      "type": "integer",
+                      "description": "Final price after any discounts (in cents)"
+                    },
+                    "variant_selections": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "description": "The selected variants for the product"
+                    }
+                  }
+                },
+                "discount_applied": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "description": "Discount code that was applied"
+                    },
+                    "amount": {
+                      "type": "integer",
+                      "description": "Amount of the discount (in cents)"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "Error": {
+          "type": "object",
+          "required": [
+            "success",
+            "error"
+          ],
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "example": false
+            },
+            "error": {
+              "type": "object",
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Error code identifier"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Human-readable error message"
+                }
+              }
+            }
+          }
+        },
+        "ErrorWithDetails": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/Error"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "object",
+                      "properties": {
+                        "field": {
+                          "type": "string",
+                          "description": "Field that caused the error"
+                        },
+                        "reason": {
+                          "type": "string",
+                          "description": "Specific reason for the error"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "securitySchemes": {
+        "apiKeyAuth": {
+          "type": "apiKey",
+          "in": "header",
+          "name": "X-Zaymo-API-Key",
+          "description": "API key authentication using the key provided to Zaymo"
+        }
+      }
+    }
+  }
