@@ -481,6 +481,56 @@
             }
           }
         }
+      },
+      "/zaymo/custom-action": {
+        "post": {
+          "tags": ["Custom Actions"],
+          "summary": "Execute Custom Action",
+          "description": "Execute a custom action when a customer clicks a custom button in email. Receives the customer's email and the action ID to process any custom business logic.",
+          "requestBody": {
+            "description": "Custom action request with customer email and action identifier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomActionRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Custom action executed successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CustomActionResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request data",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Authentication error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "components": {
@@ -811,6 +861,39 @@
               "type": "boolean",
               "example": true,
               "description": "Indicates if the request was successful"
+            }
+          }
+        },
+        "CustomActionRequest": {
+          "type": "object",
+          "required": [
+            "email",
+            "action_id"
+          ],
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "The email address of the customer who clicked the button",
+              "example": "customer@example.com"
+            },
+            "action_id": {
+              "type": "string",
+              "description": "Unique identifier for the specific action that was triggered. You can use any action_id that makes sense for your business. Example action_ids: 'claim_discount_10off', 'join_waitlist_product_123', 'change_to_quarterly', 'register_webinar_march'",
+              "example": "claim_discount_10off"
+            }
+          }
+        },
+        "CustomActionResponse": {
+          "type": "object",
+          "required": [
+            "success"
+          ],
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "example": true,
+              "description": "Indicates if the custom action was executed successfully"
             }
           }
         },

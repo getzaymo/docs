@@ -5,7 +5,8 @@
       "WebFetch(domain:mintlify.com)",
       "WebFetch(domain:getzaymo.com)",
       "Bash(mintlify dev:*)",
-      "Bash(mintlify:*)"
+      "Bash(mintlify:*)",
+      "Bash(rg:*)"
     ],
     "deny": []
   }
