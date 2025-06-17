@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:zaymo.com)",
+      "WebFetch(domain:mintlify.com)",
+      "WebFetch(domain:getzaymo.com)",
+      "Bash(mintlify dev:*)",
+      "Bash(mintlify:*)"
+    ],
+    "deny": []
+  }
+}

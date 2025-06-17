@@ -34,7 +34,7 @@
           },
           {
             "group": "Use Cases",
-            "pages": ["use-cases/product-upsells", "use-cases/subscription-portal", "use-cases/reactivate"]
+            "pages": ["use-cases/product-upsells", "use-cases/subscription-portal", "use-cases/reactivate", "use-cases/custom-button"]
           }
         ]
       },
@@ -58,6 +58,11 @@
   },
   "contextual": {
     "options": ["copy", "view", "chatgpt", "claude"]
+  },
+  "feedback": {
+    "thumbs": true,
+    "edits": false,
+    "issues": true
   },
   "api": {
     "playground": {

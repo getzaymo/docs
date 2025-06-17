@@ -2,7 +2,7 @@
     "openapi": "3.0.1",
     "info": {
       "title": "Zaymo Custom Integration API",
-      "description": "API for managing product upsells and customer interactions in email campaigns",
+      "description": "API for managing product upsells, customer interactions, and custom actions in email campaigns",
       "license": {
         "name": "MIT"
       },
@@ -30,6 +30,10 @@
       {
         "name": "Reactivate",
         "description": "Endpoints for reactivating cancelled subscriptions"
+      },
+      {
+        "name": "Custom Actions",
+        "description": "Endpoints for executing custom actions from email buttons"
       }
     ],
     "paths": {
