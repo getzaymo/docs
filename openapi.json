@@ -584,7 +584,7 @@
             "id",
             "title",
             "price",
-            "image",
+            "images",
             "quantity"
           ],
           "properties": {
@@ -602,10 +602,13 @@
               "description": "Price of the product in the subscription",
               "example": 29.99
             },
-            "image": {
-              "type": "string",
-              "format": "uri",
-              "description": "Image URL string for the product"
+            "images": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uri"
+              },
+              "description": "Array of image URL strings for the product"
             },
             "description": {
               "type": "string",
