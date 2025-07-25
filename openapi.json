@@ -599,7 +599,7 @@
             "price": {
               "type": "number",
               "format": "float",
-              "description": "Price of the product in the subscription",
+              "description": "Subscription line item price",
               "example": 29.99
             },
             "images": {
