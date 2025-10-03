@@ -800,6 +800,10 @@
             "subscription_id": {
               "type": "string",
               "description": "The unique identifier for the subscription to reactivate"
+            },
+            "discount_code": {
+              "type": "string",
+              "description": "Optional discount code to apply to the subscription"
             }
           }
         },
