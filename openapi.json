@@ -34,6 +34,10 @@
       {
         "name": "Custom Actions",
         "description": "Endpoints for executing custom actions from email buttons"
+      },
+      {
+        "name": "Discounts",
+        "description": "Endpoints for retrieving discount information"
       }
     ],
     "paths": {
@@ -531,6 +535,56 @@
             }
           }
         }
+      },
+      "/zaymo/discounts/get-discount": {
+        "get": {
+          "tags": ["Discounts"],
+          "summary": "Get Discount",
+          "description": "Retrieve discount information for a given discount code. This endpoint is necessary to support discounts in the add product and reactivate endpoints. Zaymo calls this endpoint to validate discount codes and retrieve the discount type and amount before applying them to products or subscriptions.",
+          "parameters": [
+            {
+              "name": "discount_code",
+              "in": "query",
+              "description": "The discount code to retrieve information for",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response with discount details",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/DiscountResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Authentication error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Discount code not found or invalid",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "components": {
@@ -901,6 +955,49 @@
               "type": "boolean",
               "example": true,
               "description": "Indicates if the custom action was executed successfully"
+            }
+          }
+        },
+        "DiscountResponse": {
+          "type": "object",
+          "required": [
+            "success",
+            "data"
+          ],
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "description": "Indicates if the request was successful",
+              "example": true
+            },
+            "data": {
+              "type": "object",
+              "required": [
+                "discount_type"
+              ],
+              "properties": {
+                "discount_type": {
+                  "type": "string",
+                  "enum": ["percentage", "amount"],
+                  "description": "The type of discount - either 'percentage' for a percentage-based discount or 'amount' for a fixed amount discount",
+                  "example": "percentage"
+                },
+                "discount_percentage": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "The percentage discount to apply (required when discount_type is 'percentage'). Value should be between 0 and 100.",
+                  "example": 15,
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "discount_amount": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "The fixed amount discount to apply (required when discount_type is 'amount')",
+                  "example": 10.00,
+                  "minimum": 0
+                }
+              }
             }
           }
         },
