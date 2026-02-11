@@ -45,12 +45,12 @@
         "get": {
           "tags": ["Upsells"],
           "summary": "Get Products",
-          "description": "Retrieve product information for in-email product blocks. Returns a list of recommended products for in-email upsells. Optionally, if a specific customer's email is provided as a search parameter, the products can be tailored to that customer.",
+          "description": "Retrieve product information for in-email product blocks. This endpoint should support two modes:\n\n- **Without `email` parameter**: Return all available products. These are your general/default product recommendations shown to any customer.\n- **With `email` parameter**: Return personalized products tailored to the specific customer. Use the customer's purchase history, preferences, or any other data to curate a relevant product list.\n\nIn both cases, the response format is the same — only the product selection should differ.",
           "parameters": [
             {
               "name": "email",
               "in": "query",
-              "description": "The email address of the customer opening the email. If provided, returns specific product recommendations tailored for that user. If not provided, returns generic product recommendations for all customers.",
+              "description": "The email address of the customer opening the email. When this parameter is provided, the endpoint should return personalized product recommendations tailored to this specific customer (e.g., based on their purchase history or preferences). When omitted, the endpoint should return all available products as general recommendations suitable for any customer.",
               "required": false,
               "schema": {
                 "type": "string",
