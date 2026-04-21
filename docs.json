@@ -11,6 +11,12 @@
     "dark": "/logo/zaymo-dark.svg",
     "light": "/logo/zaymo-light.svg"
   },
+  "fonts": {
+    "family": "ABC Favorit",
+    "source": "/fonts/ABCFavorit-Book.woff2",
+    "format": "woff2",
+    "weight": 350
+  },
   "favicon": "/images/favicon-32x32.png",
   "description": "Zaymo Custom Integration allows any e-commerce platform to integrate with Zaymo's in-email widgets and actions.",
   "topbarLinks": [
