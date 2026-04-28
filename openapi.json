@@ -28,6 +28,10 @@
         "description": "Endpoints for customer subscription management portal"
       },
       {
+        "name": "Swap Up",
+        "description": "Endpoints for swapping a customer's current subscription product"
+      },
+      {
         "name": "Reactivate",
         "description": "Endpoints for reactivating cancelled subscriptions"
       },
@@ -486,6 +490,66 @@
           }
         }
       },
+      "/zaymo/customer-portal/swap-product": {
+        "post": {
+          "tags": ["Swap Up"],
+          "summary": "Swap Subscription Product",
+          "description": "Swap one of the customer's current subscription items to a new product. The current item should come from GET /zaymo/customer-portal/subscription -> items[].id, and the new product should come from GET /zaymo/upsells/products. An optional discount code may be applied during the swap.",
+          "requestBody": {
+            "description": "Customer information and swap details for changing a current subscription item to a new product",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SwapProductRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Subscription item successfully swapped",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/SuccessResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request or swap cannot be performed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Authentication error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Customer, current subscription item, or new product not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "/zaymo/custom-action": {
         "post": {
           "tags": ["Custom Actions"],
@@ -922,6 +986,33 @@
               "type": "boolean",
               "example": true,
               "description": "Indicates if the request was successful"
+            }
+          }
+        },
+        "SwapProductRequest": {
+          "type": "object",
+          "required": [
+            "email",
+            "current_item_id",
+            "new_product_id"
+          ],
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "The email address of the customer"
+            },
+            "current_item_id": {
+              "type": "string",
+              "description": "The unique identifier of the customer's current subscription item, from GET /zaymo/customer-portal/subscription -> items[].id"
+            },
+            "new_product_id": {
+              "type": "string",
+              "description": "The unique identifier for the product to swap to, from GET /zaymo/upsells/products"
+            },
+            "discount_code": {
+              "type": "string",
+              "description": "Optional discount code to apply to the swapped product or subscription"
             }
           }
         },

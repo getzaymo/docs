@@ -40,7 +40,7 @@
           },
           {
             "group": "Use Cases",
-            "pages": ["use-cases/product-upsells", "use-cases/subscription-portal", "use-cases/reactivate", "use-cases/custom-button"]
+            "pages": ["use-cases/product-upsells", "use-cases/subscription-portal", "use-cases/swap-up", "use-cases/reactivate", "use-cases/custom-button"]
           }
         ]
       },
