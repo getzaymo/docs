@@ -1,0 +1,43 @@
+---
+title: Swap Up
+description: 'Let subscribers swap their current subscription product directly from email'
+---
+
+The Swap Up widget allows subscribers to upgrade or change their current subscription product directly from email without leaving their inbox.
+
+## How It Works
+
+1. Subscriber receives an email with a swap option tied to their current subscription
+2. Zaymo loads the customer's current subscription and matching swap configuration
+3. Subscriber selects the new product option they want
+4. Zaymo calls your swap endpoint to execute the product change
+5. The subscriber receives confirmation directly in the email
+
+## Required Endpoints
+
+| Endpoint | Purpose | Required |
+| --- | --- | --- |
+| [Get Products](/api-reference/upsells/get-products) | Retrieve the products that can be offered as swap targets | Yes |
+| [Get Current Subscription](/api-reference/customer-portal/get-current-subscription) | Retrieve the customer's current subscription item so Zaymo can determine swap eligibility | Yes |
+| [Swap Subscription Product](/api-reference/swap-up/swap-subscription-product) | Execute the swap from the customer's current item to the selected new product | Yes |
+
+## Getting Started
+
+Swap Up works best when you already know which existing subscription products should map to which upgrade or replacement products. Zaymo handles the customer experience and selection flow, then sends your API the current subscription item and the newly selected product.
+
+<CardGroup cols={2}>
+  <Card
+    title="API Reference"
+    icon="code"
+    href="/api-reference/overview"
+  >
+    Explore the endpoints used by Swap Up
+  </Card>
+  <Card
+    title="Authentication"
+    icon="key"
+    href="/api-reference/authentication"
+  >
+    Learn how to authenticate your API requests
+  </Card>
+</CardGroup>
