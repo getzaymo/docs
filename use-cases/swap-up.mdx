@@ -13,6 +13,46 @@ The Swap Up widget allows subscribers to upgrade or change their current subscri
 4. Zaymo calls your swap endpoint to execute the product change
 5. The subscriber receives confirmation directly in the email
 
+## Product Configuration Requirements
+
+Swap Up performs a **whole-product replacement**: it swaps the subscriber's current
+subscription item for a single target product, identified by id. Because of this, your
+catalog must be modeled so that every swappable option is its own distinct product.
+
+<Warning>
+  Swap Up does not support swapping between variants of the same product, changing the
+  billing frequency, changing quantity, or overriding price during the swap. Each swap is
+  a one-to-one product id → product id change.
+</Warning>
+
+To make Swap Up work, your store must meet the following requirements:
+
+1. **Each swappable option is a distinct product with its own stable id.** Zaymo's custom
+   integration model is flat — there is no separate variant or selling-plan concept. If
+   customers should be able to swap between, for example, three sizes or flavors, each one
+   must be its own product with a unique `id`.
+
+2. **Ids must be consistent across endpoints.** The `id` you return for a product from
+   [Get Products](/api-reference/upsells/get-products) must be the same `id` that appears as
+   `items[].id` in [Get Current Subscription](/api-reference/customer-portal/get-current-subscription)
+   when a customer is subscribed to that product. Zaymo matches a subscriber's current item
+   to a configured swap by this id, so the same product must always resolve to the same id.
+
+3. **The swap is executed as id → id.** When a subscriber swaps, Zaymo calls
+   [Swap Subscription Product](/api-reference/swap-up/swap-subscription-product) with
+   `current_item_id` (the subscriber's current `items[].id`) and `new_product_id` (the
+   selected product's `id`). Your endpoint is responsible for replacing the item and
+   applying your own pricing and billing-frequency rules for the new product.
+
+### Not supported
+
+| Capability | Notes |
+| --- | --- |
+| Variant-level swaps | Model each variant as its own product instead. |
+| Frequency / selling-plan changes | The new product keeps your store's billing rules. |
+| Quantity changes | The swap preserves the existing line; quantity is not changed. |
+| Price overrides at swap time | Pricing is owned by your store. Discounts can be passed via `discount_code`. |
+
 ## Required Endpoints
 
 | Endpoint | Purpose | Required |
